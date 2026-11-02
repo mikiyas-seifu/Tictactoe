@@ -90,10 +90,33 @@ const gamecontroller = (() => {
     return { playposition, newGame };
 })();
 
-// Test 1: X wins on the fifth move
-[0, 3, 1, 4, 2].forEach(gamecontroller.playposition);
-gamecontroller.playposition(5);   // refused, game over
+const displayController = (() => {
+    const boardDiv = document.getElementById("board");
 
-// Test 2: a tie
-gamecontroller.newGame();
-[0, 1, 2, 4, 3, 5, 7, 6, 8].forEach(gamecontroller.playposition);
+    const render = () => {
+        const board = Gameboard.showBoard();
+        boardDiv.innerHTML = ""; // Clear the board before rendering
+        board.forEach((value, index) => {
+            const cell = document.createElement("div");
+            cell.textContent = value;
+            cell.dataset.index = index;
+            boardDiv.appendChild(cell);
+        });
+    };
+
+    boardDiv.addEventListener("click", (event) => {
+        const cell = event.target;
+        if (cell.dataset.index !== undefined) {
+            const index = Number(cell.dataset.index);
+            gamecontroller.playposition(index);
+            render(); // Update the display after a move
+        }
+    });
+
+    return { render };
+})();
+
+
+
+
+displayController.render(); // Render the final state of the board
