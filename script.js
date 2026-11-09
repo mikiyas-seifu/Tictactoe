@@ -55,6 +55,18 @@ const gamecontroller = (() => {
         return board.every(square => square !== "");
     };
 
+    const getStatus = () =>{
+        if (checkWin(currentPlayer.getSymbol())) {
+            return `${currentPlayer.getName()} wins!`;
+        }
+        if (checkTie()) {
+            return "It's a tie!";
+
+        }
+        return `${currentPlayer.getName()}'s turn (${currentPlayer.getSymbol()})`;
+        
+    };
+
     const playposition = (index) => {
         if (gameOver) {
             console.log("The game is over. Call newGame() to play again.");
@@ -87,12 +99,12 @@ const gamecontroller = (() => {
         gameOver = false;
     };
 
-    return { playposition, newGame };
+    return { playposition, newGame, getStatus };
 })();
 
 const displayController = (() => {
     const boardDiv = document.getElementById("board");
-
+    const messageDiv = document.getElementById("message");
     const render = () => {
         const board = Gameboard.showBoard();
         boardDiv.innerHTML = ""; // Clear the board before rendering
@@ -102,6 +114,7 @@ const displayController = (() => {
             cell.dataset.index = index;
             boardDiv.appendChild(cell);
         });
+        messageDiv.textContent = gamecontroller.getStatus();
     };
 
     boardDiv.addEventListener("click", (event) => {
@@ -112,7 +125,11 @@ const displayController = (() => {
             render(); // Update the display after a move
         }
     });
-
+    const restartButton = document.getElementById("restart");
+    restartButton.addEventListener("click", () => {
+        gamecontroller.newGame();
+        render(); // Update the display after restarting the game
+    });
     return { render };
 })();
 
