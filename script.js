@@ -24,7 +24,10 @@ const player = (name, symbol) => {
     const getName = () => name;
     const getSymbol = () => symbol;
 
-    return { getName, getSymbol };
+    const setName = (newName) => {
+          name  = newName;
+    }
+    return { getName, getSymbol , setName};
 };
 
 const gamecontroller = (() => {
@@ -98,19 +101,35 @@ const gamecontroller = (() => {
         currentPlayer = player1;
         gameOver = false;
     };
+    const setNames = (name1, name2) => {
+    player1.setName(name1.trim() || "Player 1");
+    player2.setName(name2.trim() || "Player 2");
+};
 
-    return { playposition, newGame, getStatus };
+    return { playposition, newGame, getStatus, setNames };
 })();
 
 const displayController = (() => {
     const boardDiv = document.getElementById("board");
     const messageDiv = document.getElementById("message");
+    const namesDiv = document.getElementById("names");
+    const changeNamesButton = document.getElementById("changeNames");
+    const name1Input = document.getElementById("name1");
+    const name2Input = document.getElementById("name2");
+    const setNamesButton = document.getElementById("setNames");
+
     const render = () => {
         const board = Gameboard.showBoard();
-        boardDiv.innerHTML = ""; // Clear the board before rendering
+        boardDiv.innerHTML = "";
         board.forEach((value, index) => {
             const cell = document.createElement("div");
             cell.textContent = value;
+            if (value === "X") {
+                cell.classList.add("X");
+            }
+            if (value === "O") {
+                cell.classList.add("O");
+            }
             cell.dataset.index = index;
             boardDiv.appendChild(cell);
         });
@@ -127,11 +146,24 @@ const displayController = (() => {
     });
     const restartButton = document.getElementById("restart");
     restartButton.addEventListener("click", () => {
+
         gamecontroller.newGame();
+
+
         render(); // Update the display after restarting the game
+    });
+    changeNamesButton.addEventListener("click", () => {
+        namesDiv.hidden = false;
+    });
+    setNamesButton.addEventListener("click", () => {
+        gamecontroller.setNames(name1Input.value, name2Input.value);
+        namesDiv.hidden = true;
+        render(); // Update the display after setting the names
     });
     return { render };
 })();
+
+
 
 
 

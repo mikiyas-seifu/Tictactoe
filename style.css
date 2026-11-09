@@ -19,3 +19,11 @@ body {
   align-items: center;
   justify-content: center;
 }
+
+.X {
+  color: red;
+}
+
+.O{
+  color: blue;
+}
