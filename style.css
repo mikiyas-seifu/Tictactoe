@@ -27,3 +27,17 @@ body {
 .O{
   color: blue;
 }
+
+#message {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 20px 0;
+}
+
+#controls button {
+  margin: 10px 8px;
+  padding: 10px 10px;
+  font-size: 16px;
+  color: #f0f0f0;
+  background-color: #333; 
+}
